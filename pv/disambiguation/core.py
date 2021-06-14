@@ -178,14 +178,14 @@ class AssigneeMention(object):
         self.uuid = uuid.replace('\"', '')
         self.patent_id = patent_id.replace('\"', '') if patent_id is not None else None
         self.rawlocation_id = rawlocation_id.replace('\"', '') if rawlocation_id else None
-        if type(assignee_type) is int:
+        if type(assignee_type) is int or type(assignee_type) is float:
             self.assignee_type = str(assignee_type)
         else:
             self.assignee_type = assignee_type.replace('\"', '') if assignee_type else None
         self.raw_first = raw_first.replace('\"', '') if raw_first else ''
         self.raw_last = raw_last.replace('\"', '') if raw_last else ''
         self.organization = organization.replace('\"', '') if organization else ''
-        if type(sequence) is int:
+        if type(sequence) is int or type(sequence) is float:
             self.sequence = str(sequence)
         else:
             self.sequence = sequence.replace('\"', '') if sequence else None

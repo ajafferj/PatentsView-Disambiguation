@@ -8,9 +8,13 @@ from absl import flags
 from absl import logging
 from grinch.agglom import Agglom
 from grinch.model import LinearAndRuleModel
+import sys
+print(sys.path[0])
 
+sys.path[0] = '/Users/aajababdulhussein/Documents/Abbas/PatentsView-Disambiguation/'
 from pv.disambiguation.assignee.load_name_mentions import Loader
 from pv.disambiguation.assignee.model import AssigneeModel
+
 
 FLAGS = flags.FLAGS
 

@@ -37,8 +37,9 @@ def build_pregrants():
 
 def build_granted():
     # | uuid | patent_id | assignee_id | rawlocation_id | type | name_first | name_last | organization | sequence |
-    cnx = mysql.connector.connect(option_files=os.path.join(os.environ['HOME'], '.mylogin.cnf'),
-                                  database='patent_20200630')
+    #cnx = mysql.connector.connect(option_files=os.path.join(os.environ['HOME'], '.mylogin.cnf'),
+                                  #database='patent_20200630')
+    cnx = mysql.connector.connect(host='162.244.230.87', user='legalx', password='legalx', database='Master')
     cursor = cnx.cursor()
     query = "SELECT * FROM rawassignee;"
     cursor.execute(query)
@@ -62,21 +63,23 @@ def run(source):
 
 def main(argv):
     logging.info('Building assignee mentions')
-    feats = [n for n in map(run, ['granted', 'pregranted'])]
-    # feats = [run('granted')]
+    # feats = [n for n in map(run, ['granted', 'pregranted'])]
+    feats = [run('granted')]
     logging.info('finished loading mentions %s', len(feats))
-    name_mentions = set(feats[0].keys()).union(set(feats[1].keys()))
+    #name_mentions = set(feats[0].keys()).union(set(feats[1].keys()))
+    name_mentions = set(feats[0].keys())
     logging.info('number of name mentions %s', len(name_mentions))
     from tqdm import tqdm
     records = dict()
     from collections import defaultdict
     canopies = defaultdict(set)
     for nm in tqdm(name_mentions, 'name_mentions'):
-        anm = AssigneeNameMention.from_assignee_mentions(nm, feats[0][nm] + feats[1][nm])
+        #anm = AssigneeNameMention.from_assignee_mentions(nm, feats[0][nm] + feats[1][nm])
+        anm = AssigneeNameMention.from_assignee_mentions(nm, feats[0][nm])
         for c in anm.canopies:
             canopies[c].add(anm.uuid)
         records[anm.uuid] = anm
-
+    import pdb; pdb.set_trace()
     with open(FLAGS.feature_out + '.%s.pkl' % 'records', 'wb') as fout:
         pickle.dump(records, fout)
     with open(FLAGS.feature_out + '.%s.pkl' % 'canopies', 'wb') as fout:

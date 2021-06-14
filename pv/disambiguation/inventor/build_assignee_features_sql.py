@@ -38,8 +38,9 @@ def build_pregrants():
 
 def build_granted():
     # | uuid | patent_id | assignee_id | rawlocation_id | type | name_first | name_last | organization | sequence |
-    cnx = mysql.connector.connect(option_files=os.path.join(os.environ['HOME'], '.mylogin.cnf'),
-                                  database='patent_20200630')
+    # cnx = mysql.connector.connect(option_files=os.path.join(os.environ['HOME'], '.mylogin.cnf'),
+    #                               database='patent_20200630')
+    cnx = mysql.connector.connect(host='162.244.230.87', user='legalx', password='legalx', database='Master')
     cursor = cnx.cursor()
     query = "SELECT * FROM rawassignee;"
     cursor.execute(query)
@@ -63,7 +64,7 @@ def run(source):
 
 def main(argv):
     logging.info('Building coinventor features')
-    feats = [n for n in ProcessingPool().imap(run, ['granted', 'pregranted'])]
+    feats = [n for n in ProcessingPool().imap(run, ['granted'])]
     features = feats[0]
     for i in range(1, len(feats)):
         features.update(feats[i])
